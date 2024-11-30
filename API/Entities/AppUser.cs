@@ -18,7 +18,9 @@ public class AppUser
     public string? LookingFor { get; set; }
     public required string City { get; set; }
     public required string Country { get; set; }
-    public List<Photo> Photos { get; set; } = [];
+    public List<Photo> Photos { get; set; } = []; //Navigation property, no need to create a Dbset for photos,
+                                                  //because we can access it from the User,
+                                                  //and we wont search for a photo by id
 
     public int GetAge()
     {
