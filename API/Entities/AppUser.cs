@@ -22,8 +22,8 @@ public class AppUser
                                                   //because we can access it from the User,
                                                   //and we wont search for a photo by id
 
-    public int GetAge()
-    {
-        return DateOfBirth.CalculateAge();
-    }
+    // public int GetAge()
+    // {
+    //     return DateOfBirth.CalculateAge();
+    // }
 }

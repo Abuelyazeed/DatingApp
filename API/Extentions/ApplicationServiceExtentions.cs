@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Extentions;
 
-public static class AppilicationServiceExtentions
+public static class ApplicationServiceExtentions
 {
     public static IServiceCollection AddAppilicationService(this IServiceCollection services, IConfiguration config)
     {
@@ -15,7 +15,8 @@ public static class AppilicationServiceExtentions
             options.UseSqlite(config.GetConnectionString("DefaultConnection"));
         });
         services.AddScoped<ITokenService, TokenService>();
-        services.AddScoped<IUserRepository, UserRepository>(); 
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         
         return services;
     }
