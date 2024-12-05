@@ -47,6 +47,8 @@ namespace API.Controllers
 
         }
 
+        
+        //Post should return a 201 created not a 200 ok
         [HttpPost("add-photo")]
         public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
         {
@@ -65,12 +67,42 @@ namespace API.Controllers
                 PublicId = result.PublicId,
             };
             
-            //Add photo to user
+            //Add photo to user 
             user.Photos.Add(photo);
-            
-            if(await userRepository.SaveAllAsync()) return mapper.Map<PhotoDto>(photo);
+
+            if (await userRepository.SaveAllAsync())
+                return CreatedAtAction(nameof(GetUser),
+                    new { username = user.UserName },
+                    mapper.Map<PhotoDto>(photo));
             
             return BadRequest("Problem adding photo");
+        }
+
+        
+        [HttpPut("set-main-photo/{photoId:int}")]
+        public async Task<ActionResult> SetMainPhoto(int photoId)
+        {
+            var user = await userRepository.GetUserByUsernameAsync(User.getUsername());
+
+            if(user == null) return BadRequest("Could not find user");
+            
+            var photo = user.Photos.FirstOrDefault(p => p.Id == photoId);
+            
+            //Check is photo is unavailable or is current main
+            if(photo == null || photo.IsMain) return BadRequest("Can not use this as main photo");
+            
+            //Get the current main photo and make it not the main
+            var currentMain = user.Photos.FirstOrDefault(p => p.IsMain);
+            
+            if(currentMain != null) currentMain.IsMain = false;
+            
+            //Make photo main photo
+            photo.IsMain = true;
+            
+            //Return no content in HTTP PUT
+            if(await userRepository.SaveAllAsync()) return NoContent();
+            
+            return BadRequest("Problem setting main photo");
         }
     }
 }
