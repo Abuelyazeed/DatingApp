@@ -18,6 +18,7 @@ namespace API.Controllers
         //We passed an object , so by default the api will look in the body
         public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
         {
+            userParams.CurrentUsername = User.getUsername();
             var users = await userRepository.GetMembersAsync(userParams);
             
             Response.AddPaginationHeader(users);
