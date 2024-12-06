@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Helpers;
 
-public class PagedLists<T> : List<T>
+public class PagedList<T> : List<T>
 {
-    public PagedLists(IEnumerable<T> items, int count, int pageNumber, int pageSize)
+    public PagedList(IEnumerable<T> items, int count, int pageNumber, int pageSize)
     {
         CurrentPage = pageNumber;
         TotalPages = (int)Math.Ceiling(count / (double)pageSize);
@@ -18,7 +18,7 @@ public class PagedLists<T> : List<T>
     public int PageSize { get; set; }
     public int TotalCount { get; set; }
 
-    public static async Task<PagedLists<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize)
+    public static async Task<PagedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize)
     {
         //Get total count of items in source, (source is the data that comes from the db query)
         var count = await source.CountAsync();
@@ -29,6 +29,6 @@ public class PagedLists<T> : List<T>
         //Take(pageSize): Selects the next pageSize items (e.g., 10 items).
         var items = await source.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         
-        return new PagedLists<T>(items, count, pageNumber, pageSize);
+        return new PagedList<T>(items, count, pageNumber, pageSize);
     }
 }
