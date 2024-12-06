@@ -3,6 +3,8 @@ using API.Helpers;
 
 namespace API.Extentions;
 
+
+//This method adds the pagination header to the response, which includes:
 public static class HttpExtentions
 {
     public static void AddPaginationHeader<T>(this HttpResponse response, PagedList<T> data)

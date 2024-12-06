@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace API.Helpers;
 
+
+//The PagedList<T> class represents a paginated list of items that we return to the client.
 public class PagedList<T> : List<T>
 {
     public PagedList(IEnumerable<T> items, int count, int pageNumber, int pageSize)
@@ -10,7 +12,7 @@ public class PagedList<T> : List<T>
         TotalPages = (int)Math.Ceiling(count / (double)pageSize);
         PageSize = pageSize;
         TotalCount = count;
-        AddRange(items);
+        AddRange(items);  //The list
     }
 
     public int CurrentPage { get; set; }

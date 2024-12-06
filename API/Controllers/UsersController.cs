@@ -2,6 +2,7 @@ using System.Security.Claims;
 using API.DTOs;
 using API.Entities;
 using API.Extentions;
+using API.Helpers;
 using API.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -14,9 +15,12 @@ namespace API.Controllers
     {
         
         [HttpGet] // users
-        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
+        //We passed an object , so by default the api will look in the body
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers([FromQuery]UserParams userParams)
         {
-            var users = await userRepository.GetMembersAsync();
+            var users = await userRepository.GetMembersAsync(userParams);
+            
+            Response.AddPaginationHeader(users);
             
             return Ok(users);
         }
