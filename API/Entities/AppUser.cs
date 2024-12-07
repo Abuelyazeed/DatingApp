@@ -18,12 +18,7 @@ public class AppUser
     public string? LookingFor { get; set; }
     public required string City { get; set; }
     public required string Country { get; set; }
-    public List<Photo> Photos { get; set; } = []; //Navigation property, no need to create a Dbset for photos,
-                                                  //because we can access it from the User,
-                                                  //and we won't search for a photo by id
-
-    // public int GetAge()
-    // {
-    //     return DateOfBirth.CalculateAge();
-    // }
+    public List<Photo> Photos { get; set; } = []; //Navigation property, no need to create a Dbset for photos,because we can access it from the User,and we won't search for a photo by id
+    public List<UserLike> LikedByUsers { get; set; } = [];
+    public List<UserLike> LikedUsers { get; set; } = [];
 }
