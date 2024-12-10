@@ -21,4 +21,11 @@ public class AppUser
     public List<Photo> Photos { get; set; } = []; //Navigation property, no need to create a Dbset for photos,because we can access it from the User,and we won't search for a photo by id
     public List<UserLike> LikedByUsers { get; set; } = [];
     public List<UserLike> LikedUsers { get; set; } = [];
+    
+    public List<Message> MessagesSent { get; set; } = [];
+    
+    public List<Message> MessagesReceived { get; set; } = [];
+    
+    
+    
 }

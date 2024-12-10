@@ -10,7 +10,7 @@ public class Photo
     public bool IsMain { get; set; }
     public string? PublicId { get; set; }
     
-    //Navigation Property, (Required one to many relationship)
+    //Navigation Property, (Required in one to many relationship)
     public int AppUserId { get; set; }
     public AppUser AppUser { get; set; } = null!;
 }
