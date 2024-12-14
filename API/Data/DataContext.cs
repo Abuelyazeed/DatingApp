@@ -1,11 +1,15 @@
 using API.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Data;
 
-public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
+public class DataContext(DbContextOptions<DataContext> options) : IdentityDbContext<AppUser, AppRole, int,
+    IdentityUserClaim<int>, AppUserRole, IdentityUserLogin<int>, IdentityRoleClaim<int>, IdentityUserToken<int>>(options)
 {
-    public DbSet<AppUser> Users { get; set; }
+    //IdentityDbContext comes with a DbSet for users
+    // public DbSet<AppUser> Users { get; set; }
     public DbSet<UserLike> Likes { get; set; }
 
     public DbSet<Message> Messages { get; set; } 
@@ -13,6 +17,18 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<AppUser>()
+            .HasMany(ur => ur.UserRoles)//One AppUser can have many AppUserRoles
+            .WithOne(u => u.User) //Each AppUserRole is linked to one AppUser
+            .HasForeignKey(ur => ur.UserId)
+            .IsRequired();
+        
+        builder.Entity<AppRole>()
+            .HasMany(ur => ur.UserRoles) //One AppRole can have many AppUserRoles
+            .WithOne(u => u.Role) //Each AppUserRole is linked to one AppRole
+            .HasForeignKey(ur => ur.RoleId)
+            .IsRequired();
 
         //Likes (many to many)
         builder.Entity<UserLike>()
