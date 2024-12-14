@@ -1,7 +1,9 @@
 using API.Data;
+using API.Entities;
 using API.Extentions;
 using API.Middleware;
 using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -26,8 +28,9 @@ var services = serviceScope.ServiceProvider; //use the ServiceProvider to access
 try
 {
     var context = services.GetRequiredService<DataContext>();
+    var userManager = services.GetRequiredService<UserManager<AppUser>>();
     await context.Database.MigrateAsync(); //look for migrations and updates the database
-    await Seed.SeedUsers(context); //Add initial data
+    await Seed.SeedUsers(userManager); //Add initial data
 
 }
 catch (Exception ex)
